@@ -9,6 +9,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
 public class TestBase {
     WebDriver driver;
     WebDriverWait wait;
@@ -29,6 +32,7 @@ public class TestBase {
     }
 
     public WebElement getElementByCss(String locator){
+        waitForElementToBeVisible(locator);
        return driver.findElement(By.cssSelector(locator));
     }
     public void waitForElementToBeVisible(String locator){
@@ -47,5 +51,9 @@ public class TestBase {
         WebElement element = this.getElementByCss(locator);
         scrollToElement(element);
         return element;
+    }
+    public List<WebElement> getElementsByCss(String locator){
+        waitForElementToBeVisible(locator);
+        return driver.findElements(By.cssSelector(locator));
     }
 }

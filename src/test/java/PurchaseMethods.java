@@ -15,8 +15,10 @@ public class PurchaseMethods extends TestBase{
     String notification = ".woocommerce-message";
     String seeCartButton = ".added_to_cart";
     String cartContents = "a[class='cart-contents']";
-    String numberOfTripsInput = "input[name='quantity']";
+    String numberOfTripsInput = "div[class='quantity'] input";
     String allCategories = "ul[class='products columns-3'] li a.button";
+    String updateCartButton = "button[name='update_cart']";
+    String deleteButtonOnCartSite =".cart_item .product-remove a.remove";
 
 
     public void goToCategoriesSite(String category){
@@ -47,6 +49,12 @@ public class PurchaseMethods extends TestBase{
             category.click();
         }
     }
+    private void updateCartFormCartView(){
+        getElementByCss(updateCartButton).click();
+    }
+    private void removeTripFromCartSite(){
+        getElementByCssAndScroll(deleteButtonOnCartSite).click();
+    }
     @Test
     public void addTripToCartFormTripSite(){
         goToCategoriesSite(firstCategory);
@@ -75,4 +83,18 @@ public class PurchaseMethods extends TestBase{
         addAllTripsFromSelectedCategoryToCart();
         Assertions.assertFalse(getElementByCssAndScroll(cartContents).getText().isEmpty());
     }
+    @Test
+    public void changeNumberOfTripsOnCartSite(){
+        this.addTripToCartFormCategoriesSite();
+        typeInNumberOfTripsOnTripSite("5");
+        updateCartFormCartView();
+        Assertions.assertTrue(getElementByCssAndScroll(notification).getText().contains("Koszyk zaktualizowany"));
+    }
+    @Test
+    public void removeOneTripFromCartSite(){
+        this.addTripToCartFormCategoriesSite();
+        removeTripFromCartSite();
+        Assertions.assertTrue(getElementByCssAndScroll(notification).getText().contains("Usunięto:"));
+    }
+
 }
